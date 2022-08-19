@@ -12,5 +12,8 @@
             "App\\": "app"
         }
     },
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^5.4",
+        "league/config": "^1.1"
+    }
 }
