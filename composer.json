@@ -1,0 +1,11 @@
+{
+    "name": "mavi.onogomuho/start-app",
+    "description": "Setup initialization for web apps creation",
+    "authors": [
+        {
+            "name": "Mavi Onogomuho",
+            "email": "princetunes@gmail.com"
+        }
+    ],
+    "require": {}
+}
