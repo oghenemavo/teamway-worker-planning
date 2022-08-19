@@ -40,5 +40,3 @@ $config->merge([
         'password' => $_ENV['DB_PASSWORD'],
     ],
 ]);
-
-global $config;

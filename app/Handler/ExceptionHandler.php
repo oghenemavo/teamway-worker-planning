@@ -4,6 +4,7 @@ namespace App\Handler;
 
 use ErrorException;
 use Exception;
+use App\Handler\ViewHandler;
 
 class ExceptionHandler
 {
@@ -41,7 +42,8 @@ class ExceptionHandler
         }
         http_response_code($code);
 
-        if ($_ENV['DEBUG']) {
+        $debug = $_ENV['DEBUG'] == 'true' ? true : false;
+        if ($debug) {
             echo "<h1>Fatal error</h1>";
             echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
             echo "<p>Err code: '" . $exception->getCode() . "'</p>";
@@ -49,7 +51,12 @@ class ExceptionHandler
             echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
             echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
         } else {
-            $log = dirname(__DIR__, 4) . '/logs/' . date('Y-m-d') . '.txt';
+            $logsDirectory = dirname(__DIR__, 2) . '/logs/';
+            if (!is_dir($logsDirectory)) {
+                mkdir($logsDirectory);
+            }
+            
+            $log = dirname(__DIR__, 2) . '/logs/' . date('Y-m-d') . '.txt';
             ini_set('error_log', $log);
 
             $message = "Uncaught exception: '" . get_class($exception) . "'";
@@ -57,7 +64,9 @@ class ExceptionHandler
             $message .= "\nStack trace: " . $exception->getTraceAsString();
             $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
 
-            error_log($message);
+            error_log($message, 3, $log);
+
+            ViewHandler::render("errors/{$code}.html");
         }
     }
 }
