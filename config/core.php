@@ -15,12 +15,12 @@ $dotenv->load();
 // Define your configuration schema
 $config = new Configuration([
     'database' => Expect::structure([
-        'driver' => Expect::anyOf('mysql', 'postgresql', 'sqlite')->required(),
+        'driver' => Expect::string(),
         'host' => Expect::string()->default('localhost'),
         'port' => Expect::int()->min(1)->max(65535),
         'ssl' => Expect::bool(),
-        'database' => Expect::string()->required(),
-        'username' => Expect::string()->required(),
+        'database' => Expect::string(),
+        'username' => Expect::string(),
         'password' => Expect::string()->nullable(),
     ]),
     'logging' => Expect::structure([
