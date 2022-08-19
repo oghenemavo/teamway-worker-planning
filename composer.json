@@ -1,5 +1,5 @@
 {
-    "name": "mavi.onogomuho/start-app",
+    "name": "oghenemavo/start-app",
     "description": "Setup initialization for web apps creation",
     "authors": [
         {
@@ -7,5 +7,10 @@
             "email": "princetunes@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "app"
+        }
+    },
     "require": {}
 }
