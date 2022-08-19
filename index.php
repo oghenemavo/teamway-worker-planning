@@ -1,7 +1,7 @@
 <?php
 
-// echo "start up";
-// echo __DIR__;
-// echo dirname(__DIR__, 2);
+echo "start up";
 
-require_once 'config/database.php';
+require_once 'config/app.php';
+
+// echo $config;

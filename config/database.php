@@ -1,5 +1,5 @@
 <?php
 
-require_once 'core.php';
+// require_once 'core.php';
 
-echo $config->get('database.driver');
+// echo $config->get('database.driver');
