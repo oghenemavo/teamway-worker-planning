@@ -1,0 +1,204 @@
+openapi: 3.0.0
+info:
+  title: teamway
+  version: 1.0.0
+servers:
+  - url: http://localhost/teamway/api
+tags:
+  - name: Users
+  - name: Roles
+  - name: Shifts
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Get Users
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Users
+      summary: Create User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: john doe
+                email: xerc@demo.com
+                phone: '0998887776'
+                role_id: 1
+                created_at: '2022-08-22 15:05:32'
+                updated_at: '2022-08-22 15:05:32'
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get Single User
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /users/{id}/shift:
+    get:
+      tags:
+        - Users
+      summary: Get Single User Shifts
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    post:
+      tags:
+        - Users
+      summary: Create User Shift
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                shift_id: '1'
+                shift_date: '2022-09-25'
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /roles:
+    post:
+      tags:
+        - Roles
+      summary: Create Role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                name: Role 3
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Roles
+      summary: Get Roles
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /roles/{id}:
+    get:
+      tags:
+        - Roles
+      summary: Get Single Role
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /shifts:
+    post:
+      tags:
+        - Shifts
+      summary: Create Shift
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                period: 16-24
+      parameters:
+        - name: Accept
+          in: header
+          schema:
+            type: string
+          example: application/json
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+    get:
+      tags:
+        - Shifts
+      summary: Get Shifts
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /shifts/{id}:
+    get:
+      tags:
+        - Shifts
+      summary: Get Single Shift
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
