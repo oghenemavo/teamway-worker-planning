@@ -36,8 +36,6 @@ if (strtolower($parts[2]) == 'api') {
     $controller = new UserController($db);
 
     $controller->processRequest($_SERVER["REQUEST_METHOD"], $id);
-
-    // echo '<pre>' . var_export(get_declared_classes(), true) . '</pre>';
 } else {
 
 }

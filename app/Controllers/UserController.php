@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use PDO;
 
 class UserController extends BaseController
@@ -27,7 +28,9 @@ class UserController extends BaseController
     {
         switch ($method) {
             case 'GET':
-                echo json_encode([1]);
+                $user = new User($this->pdo);
+                // var_dump($user->read());
+                echo json_encode($user->read());
                 break;
                 
             default:
@@ -40,7 +43,13 @@ class UserController extends BaseController
     {
         switch ($method) {
             case 'GET':
-                echo json_encode([1]);
+                $user = new User($this->pdo);
+                
+                echo json_encode([
+                    'status' => true,
+                    'message' => 'Users fetched Successfully',
+                    'data' => $user->read()
+                ]);
                 break;
                 
             case 'POST':
