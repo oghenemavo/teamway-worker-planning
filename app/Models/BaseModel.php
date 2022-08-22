@@ -39,17 +39,10 @@ class BaseModel
         $sql .= " ({$tableColumns}) ";
         $sql .= " VALUES ({$placeholder})";
         
-        try {
-            $stmt = $this->pdo->prepare($sql);
-            
-            $stmt->execute($data);
-            return $this->pdo->lastInsertId();
-        } catch (\PDOException $e) {
-            return [
-                'status' => false,
-                'message' => $e->getMessage()
-            ];
-        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+        return $this->pdo->lastInsertId();
+        
     }
 
     public function where($column, $value) {
@@ -58,11 +51,10 @@ class BaseModel
     }
 
     public function retrieve($columns = []) {
-        $sql = "SELECT * FROM {$this->table} ";
+        $this->_sql = "SELECT * FROM {$this->table} ";
         if (count($columns)) {
-            $sql = "SELECT " . implode(', ', $columns) . " FROM " . $this->table . " ";
+            $this->_sql = "SELECT " . implode(', ', $columns) . " FROM " . $this->table . " ";
         }
-        $this->_sql = $sql;
         return $this;
     }
 

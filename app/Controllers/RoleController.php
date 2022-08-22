@@ -64,10 +64,7 @@ class RoleController extends BaseController
                 $validator->addValidator('unique', new UniqueRule($this->pdo));
 
                 $rules = [
-                    'email' => 'required|unique:users,email',
-                    'name' => 'required',
-                    'phone' => 'required|numeric',
-                    'role_id' => 'required|numeric',
+                    'name' => 'required|unique:roles,name',
                 ];
 
                 $validation = $validator->validate((array) $request, $rules);
@@ -87,19 +84,14 @@ class RoleController extends BaseController
                 
                 // validation passes
                 $role = new Role($this->pdo);
-                $role->name = $request->name;
-                $role->email = $request->email;
-                $role->phone = $request->phone;
-                $user->role_id = $request->role_id;
-                $user->created_at = date('Y-m-d h:i:s');
-                $user->updated_at = date('Y-m-d h:i:s');
-                $id = $user->insert();
+                $role->name = trim($request->name);
+                $id = $role->insert();
                 
                 http_response_code(201);
                 echo json_encode([
                     'status' => true,
-                    'message' => 'User created',
-                    'data' => $user->retrieve()->where('id', $id)->get()
+                    'message' => 'Role created',
+                    'data' => $role->retrieve()->where('id', $id)->get()
                 ]);
                 
                 break;

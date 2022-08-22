@@ -2,15 +2,19 @@
 
 use App\Handler\DatabaseHandler;
 
-$connection = null;
+$db = DatabaseHandler::getInstance();
 
 if ($config->get('database.driver')) {
-    $db = new DatabaseHandler(
-        $config->get('database.driver'),
+    $connection = $db->connect(
+        $config->get('database.driver'), 
         $config->get('database.host'), 
         $config->get('database.database'), 
         $config->get('database.username'), 
         $config->get('database.password')
     );
-    $connection = $db->connect();
+    // $config->get('database.driver'),
+    //     $config->get('database.host'), 
+    //     $config->get('database.database'), 
+    //     $config->get('database.username'), 
+    //     $config->get('database.password')
 }

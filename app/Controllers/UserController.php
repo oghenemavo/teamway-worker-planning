@@ -94,6 +94,7 @@ class UserController extends BaseController
                 $user->role_id = $request->role_id;
                 $user->created_at = date('Y-m-d h:i:s');
                 $user->updated_at = date('Y-m-d h:i:s');
+                
                 $id = $user->insert();
                 
                 http_response_code(201);
