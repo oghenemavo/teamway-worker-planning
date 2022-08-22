@@ -1,30 +1,21 @@
 <?php
 
-use App\Controllers\UserController;
-use App\Handler\DatabaseHandler;
-// use App\Controllers\UserController;
-
-// $a = new UserController();
-// echo "start up";
+use App\Controllers\{UserController, RoleController};
 
 require_once 'config/app.php';
 require_once 'config/database.php';
 
-// header("Access-Control-Allow-Origin: *");
-// header("Content-Type: application/json; charset=UTF-8");
-// header("Access-Control-Allow-Methods: GET,POST");
-// header("Access-Control-Max-Age: 3600");
-// header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: GET,POST");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
 // echo $config;
 $parts = explode('/', $_SERVER['REQUEST_URI']);
 
-$db = DatabaseHandler::getInstance()->connect('mysql', 'localhost', 'teamway_db', 'root', '');
-
-if (strtolower($parts[2]) == 'api') {
-    $routes = ['users'];
+if (strtolower($parts[2]) == 'api') { // api
+    $routes = ['users', 'roles'];
 
     if (!in_array($parts[3], $routes)) {
         http_response_code(404);
@@ -33,9 +24,20 @@ if (strtolower($parts[2]) == 'api') {
 
     $id = $parts[4] ?? null;
 
-    $user = new UserController($db);
-    $user->processRequest($_SERVER["REQUEST_METHOD"], $id);
-} else {
+    switch ($parts[3]) {
+        case 'users':
+            $user = new UserController($connection);
+            $user->processRequest($_SERVER["REQUEST_METHOD"], $id);
+            break;
+
+        case 'roles':
+            $role = new RoleController($connection);
+            $role->processRequest($_SERVER["REQUEST_METHOD"], $id);
+            break;
+    }
+
+
+} else {// mvc
 
 }
 
