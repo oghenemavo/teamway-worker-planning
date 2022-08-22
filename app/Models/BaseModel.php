@@ -8,7 +8,8 @@ class BaseModel
 {
     protected array $cols = [];
 
-    public string $table;
+    protected string $table;
+    protected string $_sql;
 
     public function __construct(private PDO $pdo)
     {
@@ -51,7 +52,21 @@ class BaseModel
         }
     }
 
-    public function read()
+    public function where($column, $value) {
+        $this->_sql .= " WHERE {$column} = {$value} ";
+        return $this;
+    }
+
+    public function retrieve($columns = []) {
+        $sql = "SELECT * FROM {$this->table} ";
+        if (count($columns)) {
+            $sql = "SELECT " . implode(', ', $columns) . " FROM " . $this->table . " ";
+        }
+        $this->_sql = $sql;
+        return $this;
+    }
+
+    public function all()
     {
         try {
             $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} ORDER BY id DESC");
@@ -86,5 +101,25 @@ class BaseModel
                 'message' => $e->getMessage()
             ];
         }
+    }
+
+    public function limit(int $limit = 1) {
+        if (stripos($this->_sql, 'SELECT') === false) {
+            throw new \Exception("Error, sql needs SELECT keyword");
+        }
+
+        $this->_sql .= "LIMIT $limit ";
+        return $this;
+    }
+
+    public function get() {
+        $stmt = $this->pdo->prepare($this->_sql);
+        $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class(), [$this->pdo]);
+        $stmt->execute();
+
+        if (stripos($this->_sql, 'LIMIT') === false) {
+            return $stmt->fetchAll();
+        }
+        return $stmt->fetch();
     }
 }

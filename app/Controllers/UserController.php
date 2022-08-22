@@ -29,8 +29,12 @@ class UserController extends BaseController
         switch ($method) {
             case 'GET':
                 $user = new User($this->pdo);
-                // var_dump($user->read());
-                echo json_encode($user->read());
+
+                echo json_encode([
+                    'status' => true,
+                    'message' => 'User fetched Successfully',
+                    'data' => $user->retrieve()->where('id', $id)->get()
+                ]);
                 break;
                 
             default:
@@ -44,16 +48,38 @@ class UserController extends BaseController
         switch ($method) {
             case 'GET':
                 $user = new User($this->pdo);
-                
+
                 echo json_encode([
                     'status' => true,
                     'message' => 'Users fetched Successfully',
-                    'data' => $user->read()
+                    'data' => $user->all()
                 ]);
                 break;
                 
             case 'POST':
-                echo json_encode([1]);
+                $request = (object) json_decode(file_get_contents("php://input"), true);
+                
+                // if ( ! empty($errors)) {
+                //     http_response_code(422);
+                //     echo json_encode(["errors" => $errors]);
+                //     break;
+                // }
+
+                $user = new User($this->pdo);
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->phone = $request->phone;
+                $user->role_id = $request->role_id;
+                $user->created_at = date('Y-m-d h:i:s');
+                $user->updated_at = date('Y-m-d h:i:s');
+                $id = $user->insert();
+                
+                http_response_code(201);
+                echo json_encode([
+                    'status' => true,
+                    'message' => 'User created',
+                    'data' => $user->retrieve()->where('id', $id)->get()
+                ]);
                 break;
             
             default:
