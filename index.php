@@ -23,11 +23,12 @@ if (strtolower($parts[2]) == 'api') { // api
     }
 
     $id = $parts[4] ?? null;
+    $extra = $parts[5] ?? null;
 
     switch ($parts[3]) {
         case 'users':
             $user = new UserController($connection);
-            $user->processRequest($_SERVER["REQUEST_METHOD"], $id);
+            $user->processRequest($_SERVER["REQUEST_METHOD"], $id, $extra);
             break;
 
         case 'roles':

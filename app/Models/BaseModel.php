@@ -46,7 +46,16 @@ class BaseModel
     }
 
     public function where($column, $value) {
-        $this->_sql .= " WHERE {$column} = {$value} ";
+        $this->_sql .= " WHERE `{$column}` = '{$value}' ";
+        return $this;
+    }
+
+    public function andWhere($column, $value) {
+        if (stripos($this->_sql, 'WHERE') === false) {
+            throw new \Exception("Error, sql needs where clause");
+        }
+
+        $this->_sql .= "AND `{$column}` = '{$value}' ";
         return $this;
     }
 
@@ -95,7 +104,7 @@ class BaseModel
         }
     }
 
-    public function limit(int $limit = 1) {
+    public function limit($limit = 1) {
         if (stripos($this->_sql, 'SELECT') === false) {
             throw new \Exception("Error, sql needs SELECT keyword");
         }
@@ -105,13 +114,14 @@ class BaseModel
     }
 
     public function get() {
-        $stmt = $this->pdo->prepare($this->_sql);
+        $stmt = $this->pdo->prepare(trim($this->_sql));
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class(), [$this->pdo]);
         $stmt->execute();
-
+        
         if (stripos($this->_sql, 'LIMIT') === false) {
             return $stmt->fetchAll();
         }
+        
         return $stmt->fetch();
     }
 }
