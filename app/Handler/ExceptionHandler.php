@@ -44,12 +44,23 @@ class ExceptionHandler
 
         $debug = $_ENV['DEBUG'] == 'true' ? true : false;
         if ($debug) {
-            echo "<h1>Fatal error</h1>";
-            echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
-            echo "<p>Err code: '" . $exception->getCode() . "'</p>";
-            echo "<p>Messages: '" . $exception->getMessage() . "'</p>";
-            echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
-            echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
+            $message = "<h1>Fatal error</h1>";
+            $message .= "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
+            $message .= "<p>Err code: '" . $exception->getCode() . "'</p>";
+            $message .= "<p>Messages: '" . $exception->getMessage() . "'</p>";
+            $message .= "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
+            $message .= "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
+
+            if (str_contains($_SERVER['REQUEST_URI'], 'api')) {
+                echo json_encode([
+                    "code" => $exception->getCode(),
+                    "message" => $exception->getMessage(),
+                    "file" => $exception->getFile(),
+                    "line" => $exception->getLine()
+                ]);
+            } else {
+                echo $message;
+            }
         } else {
             $logsDirectory = dirname(__DIR__, 2) . '/logs/';
             if (!is_dir($logsDirectory)) {
