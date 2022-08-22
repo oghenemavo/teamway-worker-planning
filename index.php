@@ -1,6 +1,6 @@
 <?php
 
-use App\Controllers\{UserController, RoleController};
+use App\Controllers\{UserController, RoleController, ShiftController};
 
 require_once 'config/app.php';
 require_once 'config/database.php';
@@ -15,7 +15,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 $parts = explode('/', $_SERVER['REQUEST_URI']);
 
 if (strtolower($parts[2]) == 'api') { // api
-    $routes = ['users', 'roles'];
+    $routes = ['users', 'roles', 'shifts'];
 
     if (!in_array($parts[3], $routes)) {
         http_response_code(404);
@@ -33,6 +33,11 @@ if (strtolower($parts[2]) == 'api') { // api
         case 'roles':
             $role = new RoleController($connection);
             $role->processRequest($_SERVER["REQUEST_METHOD"], $id);
+            break;
+
+        case 'shifts':
+            $shift = new ShiftController($connection);
+            $shift->processRequest($_SERVER["REQUEST_METHOD"], $id);
             break;
     }
 
